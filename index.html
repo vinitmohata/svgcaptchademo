@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<body>
+
+  <div ng-app="myApp" ng-controller="myCtrl">
+
+    <div id="div"></div>
+
+    <input type="text" ng-model="text" />
+    <button ng-click="submit()">submit</button>
+  </div>
+
+  <script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+  $http({method : "GET",url : "/captcha"}).then(function mySucces(response) {
+     var e = document.getElementById('div');
+         e.innerHTML = response.data;
+    }, function myError(response) {
+      alert(response);
+  });
+
+$scope.submit= function(){
+    $http({method : "POST",url : "/validate", data:{'text':$scope.text}}).then(function mySucces(response) {
+     if(response.data)
+     alert('verified');
+     else
+     alert('Invalid');
+    }, function myError(response) {
+       alert(response);
+  });
+}
+
+});
+</script>
+
+</body>
+
+</html>
